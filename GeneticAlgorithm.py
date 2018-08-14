@@ -12,10 +12,8 @@ def main():
     # Initialization for the random number generator used to create our starting population bit strings.
     random.seed()
 
-    # A list used to rep a chromosome (list of binary string genes).
-
     # A dictionary used to rep a population of chromosomes (list of binary string chromosomes).
-
+    instanceOfGeneticAlgorithm = {}
 
     # A Boolean to track whether the target solution has been found.
     targetFound = False
@@ -25,42 +23,49 @@ def main():
     startingPopulationSize = 10000
     chromosomeSize = 80
 
+    # Establish the target value.
+    target = 27
+
     # Create the starting population using the startingPopulationSize.
     for i in range(startingPopulationSize, 0, -1):
 
         # Create the next chromosome in the population.
-        nextChromosome = []
+        nextChromosome = {}
+        nextChromosomeName = []
         for j in range(chromosomeSize):
             randomBit = str(random.getrandbits(1))
-            nextChromosome.append(randomBit)
+            nextChromosomeName.append(randomBit)
+        nextChromosome = {'name': nextChromosomeName}
 
         # Evaluate the chromosome.
-
+        evaluate(nextChromosome, target)
 
         # Check to see if the chromosome matches the target.
-
-
+        if(nextChromosome['evaluate'] == target):
+            targetFound = True
         # Otherwise, add the chromosome to the starting population.
+        #else:
+         #   instanceOfGeneticAlgorithm['']
 
-def evaluate(chromosome):
+def evaluate(chromosome, target):
 
     # Define the variables needed to calculate the evaluation of the chromosome.
+    chromosomeName = chromosome['name']
     chromosomeGenes = []
     evalution = 0
     nextOperator = 0
     nextValue = 0
 
     # Parse the chromosome 4 bits at a time into genes.
-    for i in range(0, chromosome - 4, 4):
+    for i in range(0, len(chromosomeName) - 4, 4):
 
-        ### TODO: Better way to do this?
+        newGene = ''
+
         # Decode the bits for a gene and add the gene to the list of genes.
-        gene = str(chromosome[i])
-        gene += str(chromosome[i + 1])
-        gene += str(chromosome[i + 2])
-        gene += chromosome[i + 3]
+        for j in range(4):
+            newGene += str(chromosomeName[i + j])
 
-        chromosomeGenes.append(gene)
+        chromosomeGenes.append(newGene)
 
     # Evaluate the genes to determine the chromosome's collective evaluation.
     #for i in chromosomeGenes:
