@@ -41,7 +41,7 @@ def main():
         evaluate(nextChromosome, target)
 
         # Check to see if the chromosome matches the target.
-        if(nextChromosome['evaluate'] == target):
+        if(nextChromosome['evaluation'] == target):
             targetFound = True
         # Otherwise, add the chromosome to the starting population.
         #else:
@@ -52,8 +52,10 @@ def evaluate(chromosome, target):
     # Define the variables needed to calculate the evaluation of the chromosome.
     chromosomeName = chromosome['name']
     chromosomeGenes = []
-    evalution = 0
-    nextOperator = 0
+    chromosomeUsableGenes = []
+    evaluation = .0
+    operatorNext = False
+    nextOperator = ''
     nextValue = 0
 
     # Parse the chromosome 4 bits at a time into genes.
@@ -68,14 +70,113 @@ def evaluate(chromosome, target):
         chromosomeGenes.append(newGene)
 
     # Evaluate the genes to determine the chromosome's collective evaluation.
-    #for i in chromosomeGenes:
+    for i in chromosomeGenes:
 
-        #value =
+        # Decode the genes into their usable equivalent mathematical values. The pattern followed will
+        # be: number -> operator -> number -> operator -> ... -> number.
 
-        # Decode the genes into their equivalent mathematical values.
-        #if i == '0000'
+        # If the next value we need is a number, determine which number, if any, the gene decodes to.
+        if nextOperator == False:
+            if i == '0000':
+                chromosomeUsableGenes.append(0)
+                nextOperator = True
+                continue
+            elif i == '0001':
+                chromosomeUsableGenes.append(1)
+                nextOperator = True
+                continue
+            elif i == '0010':
+                chromosomeUsableGenes.append(2)
+                nextOperator = True
+                continue
+            elif i == '0011':
+                chromosomeUsableGenes.append(3)
+                nextOperator = True
+                continue
+            elif i == '0100':
+                chromosomeUsableGenes.append(4)
+                nextOperator = True
+                continue
+            elif i == '0101':
+                chromosomeUsableGenes.append(5)
+                nextOperator = True
+                continue
+            elif i == '0110':
+                chromosomeUsableGenes.append(6)
+                nextOperator = True
+                continue
+            elif i == '0111':
+                chromosomeUsableGenes.append(7)
+                nextOperator = True
+                continue
+            elif i == '1000':
+                chromosomeUsableGenes.append(8)
+                nextOperator = True
+                continue
+            elif i == '1001':
+                chromosomeUsableGenes.append(9)
+                nextOperator = True
+                continue
+            elif i == '1010':
+                continue
+            elif i == '1011':
+                continue
+            elif i == '1100':
+                continue
+            elif i == '1101':
+                continue
+            elif i == '1110':
+                continue
+            elif i == '1111':
+                continue
+        # Otherwise, the next value we need is an operator. so determine which operator, if any, the gene decodes to.
+        else:
+            if i == '0000':
+                continue
+            elif i == '0001':
+                continue
+            elif i == '0010':
+                continue
+            elif i == '0011':
+                continue
+            elif i == '0100':
+                continue
+            elif i == '0101':
+                continue
+            elif i == '0110':
+                continue
+            elif i == '0111':
+                continue
+            elif i == '1000':
+                continue
+            elif i == '1001':
+                continue
+            elif i == '1010':
+                chromosomeUsableGenes.append('+')
+                nextOperator = False
+                continue
+            elif i == '1011':
+                chromosomeUsableGenes.append('-')
+                nextOperator = False
+                continue
+            elif i == '1100':
+                chromosomeUsableGenes.append('*')
+                nextOperator = False
+                continue
+            elif i == '1101':
+                chromosomeUsableGenes.append('/')
+                nextOperator = False
+                continue
+            elif i == '1110':
+                continue
+            elif i == '1111':
+                continue
+
+    # Determine the evaluated total of the usable genes.
+    #for i in chromosomeUsableGenes:
 
 
+    chromosome['evaluation'] = float(evaluation)
 
 # This allows a python file to be used as an executable (main will run) or as a library (main will not).
 if __name__ == "__main__":
