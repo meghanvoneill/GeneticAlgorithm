@@ -27,25 +27,34 @@ def main():
     target = 27
 
     # Create the starting population using the startingPopulationSize.
-    for i in range(startingPopulationSize, 0, -1):
+    population00 = []
 
-        # Create the next chromosome in the population.
-        nextChromosome = {}
-        nextChromosomeName = []
-        for j in range(chromosomeSize):
-            randomBit = str(random.getrandbits(1))
-            nextChromosomeName.append(randomBit)
-        nextChromosome = {'name': nextChromosomeName}
+    while targetFound == False:
+        for i in range(startingPopulationSize, 0, -1):
 
-        # Evaluate the chromosome.
-        evaluate(nextChromosome, target)
+            # Create the next chromosome in the population.
+            nextChromosome = {}
+            nextChromosomeName = []
+            for j in range(chromosomeSize):
+                randomBit = str(random.getrandbits(1))
+                nextChromosomeName.append(randomBit)
+            nextChromosome = {'name': nextChromosomeName}
 
-        # Check to see if the chromosome matches the target.
-        if(nextChromosome['evaluation'] == target):
-            targetFound = True
-        # Otherwise, add the chromosome to the starting population.
-        #else:
-         #   instanceOfGeneticAlgorithm['']
+            # Evaluate the chromosome.
+            evaluate(nextChromosome, target)
+
+            # Check to see if the chromosome matches the target.
+            if(nextChromosome['evaluation'] == target):
+                print("The chromosome that succeeded: " + str(nextChromosomeName))
+                targetFound = True
+            # Otherwise, add the chromosome to the starting population.
+            else:
+                population00.append(nextChromosome)
+
+     # Add the starting population to the
+    instanceOfGeneticAlgorithm = {'population00': population00}
+
+    # Create the next population.
 
 def evaluate(chromosome, target):
 
@@ -76,46 +85,46 @@ def evaluate(chromosome, target):
         # be: number -> operator -> number -> operator -> ... -> number.
 
         # If the next value we need is a number, determine which number, if any, the gene decodes to.
-        if nextOperator == False:
+        if operatorNext == False:
             if i == '0000':
                 chromosomeUsableGenes.append(0)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '0001':
                 chromosomeUsableGenes.append(1)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '0010':
                 chromosomeUsableGenes.append(2)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '0011':
                 chromosomeUsableGenes.append(3)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '0100':
                 chromosomeUsableGenes.append(4)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '0101':
                 chromosomeUsableGenes.append(5)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '0110':
                 chromosomeUsableGenes.append(6)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '0111':
                 chromosomeUsableGenes.append(7)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '1000':
                 chromosomeUsableGenes.append(8)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '1001':
                 chromosomeUsableGenes.append(9)
-                nextOperator = True
+                operatorNext = True
                 continue
             elif i == '1010':
                 continue
@@ -153,19 +162,19 @@ def evaluate(chromosome, target):
                 continue
             elif i == '1010':
                 chromosomeUsableGenes.append('+')
-                nextOperator = False
+                operatorNext = False
                 continue
             elif i == '1011':
                 chromosomeUsableGenes.append('-')
-                nextOperator = False
+                operatorNext = False
                 continue
             elif i == '1100':
                 chromosomeUsableGenes.append('*')
-                nextOperator = False
+                operatorNext = False
                 continue
             elif i == '1101':
                 chromosomeUsableGenes.append('/')
-                nextOperator = False
+                operatorNext = False
                 continue
             elif i == '1110':
                 continue
@@ -173,9 +182,33 @@ def evaluate(chromosome, target):
                 continue
 
     # Determine the evaluated total of the usable genes.
-    #for i in chromosomeUsableGenes:
 
+    # Set the evaluation to the first usable gene, a number.
+    evaluation = float(chromosomeUsableGenes[0])
 
+    # Since the usable genes follow the number -> operator -> number pattern, if the index is odd,
+    # the value is an operator (string).
+    for i in range(1, len(chromosomeUsableGenes) - 1, 2):
+
+        # Store the next operator and the next value.
+        nextOperator = chromosomeUsableGenes[i]
+        nextValue = chromosomeUsableGenes[(i + 1)]
+
+        # Based on the operator, perform the corresponding calculation.
+        if nextOperator == '+':
+            evaluation = evaluation + nextValue
+        if nextOperator == '-':
+            evaluation = evaluation - nextValue
+        if nextOperator == '*':
+            evaluation = evaluation * nextValue
+        if nextOperator == '/':
+            # Ensure no division by zero.
+            if nextValue != 0:
+                evaluation = evaluation / nextValue
+            # Otherwise the loop advances to the next operator to see if there is a viable pairing to evaluate.
+
+    # Store the final evaluation as a float back in the chromosome's dictionary.
+    print(evaluation)
     chromosome['evaluation'] = float(evaluation)
 
 # This allows a python file to be used as an executable (main will run) or as a library (main will not).
