@@ -29,34 +29,37 @@ def main():
     # Create the starting population:
     population00 = []
 
-    while targetFound == False:
-        for i in range(startingPopulationSize, 0, -1):
 
-            # Create the next chromosome in the population.
-            nextChromosome = {}
-            nextChromosomeName = []
-            for j in range(chromosomeSize):
-                randomBit = str(random.getrandbits(1))
-                nextChromosomeName.append(randomBit)
-            nextChromosome = {'name': nextChromosomeName}
+    for i in range(startingPopulationSize, 0, -1):
 
-            # Evaluate the chromosome.
-            evaluate(nextChromosome, target)
+        # Create the next chromosome in the population.
+        nextChromosome = {}
+        nextChromosomeName = []
+        for j in range(chromosomeSize):
+            randomBit = str(random.getrandbits(1))
+            nextChromosomeName.append(randomBit)
+        nextChromosome = {'name': nextChromosomeName}
 
-            # Check to see if the chromosome matches the target.
-            if(nextChromosome['evaluation'] == target):
-                print("The chromosome that succeeded: " + str(nextChromosomeName))
-                targetFound = True
-            # Otherwise, add the chromosome to the starting population.
-            else:
-                population00.append(nextChromosome)
+        # Evaluate the chromosome.
+        evaluate(nextChromosome, target)
+
+        # Check to see if the chromosome matches the target.
+        if(nextChromosome['evaluation'] == target):
+            print("The chromosome that succeeded: " + str(nextChromosomeName))
+            targetFound = True
+        # Otherwise, add the chromosome to the starting population.
+        else:
+            population00.append(nextChromosome)
 
      # Add the starting population to the
     instanceOfGeneticAlgorithm = {'population00': population00}
 
     # Create the next population:
 
+    #for i in range(startingPopulationSize):
+
         # Select two members of the starting population based on fitness and using roulette wheel selection.
+
 
         # Crossover bits from each of the chosen chromosomes.
 
