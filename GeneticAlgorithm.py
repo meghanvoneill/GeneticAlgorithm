@@ -26,7 +26,7 @@ def main():
     # Establish the target value.
     target = 27
 
-    # Create the starting population using the startingPopulationSize.
+    # Create the starting population:
     population00 = []
 
     while targetFound == False:
@@ -54,7 +54,19 @@ def main():
      # Add the starting population to the
     instanceOfGeneticAlgorithm = {'population00': population00}
 
-    # Create the next population.
+    # Create the next population:
+
+        # Select two members of the starting population based on fitness and using roulette wheel selection.
+
+        # Crossover bits from each of the chosen chromosomes.
+
+            # Good crossover rate: .7
+
+        # Step through the chosen chromosomes' bits and flip for mutations.
+
+            # Good mutation rate: .001
+
+
 
 def evaluate(chromosome, target):
 
@@ -208,8 +220,21 @@ def evaluate(chromosome, target):
             # Otherwise the loop advances to the next operator to see if there is a viable pairing to evaluate.
 
     # Store the final evaluation as a float back in the chromosome's dictionary.
-    print(evaluation)
     chromosome['evaluation'] = float(evaluation)
+
+def fitness(chromosome, target):
+
+    evaluation = chromosome['evaluation']
+
+    # If the target and the evaluation are the same, a successful solution has been found.
+    if target - evaluation == 0:
+        return chromosome
+
+    # Otherwise, calculate the chromosome's fitness and store it back in the chromosome's dictionary.
+    foundFitness = 1 / (target - evaluation)
+    chromosome['fitness'] = float(foundFitness)
+
+
 
 # This allows a python file to be used as an executable (main will run) or as a library (main will not).
 if __name__ == "__main__":
