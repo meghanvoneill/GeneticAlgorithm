@@ -26,8 +26,18 @@ def main():
     # Establish the target value.
     target = 27
 
+    # A variable for tracking the total fitness of the starting population for use in roulette wheel selection later.
+    totalFitness = .0
+
+    # A variable to hold the partial summation of fitnesses evaluated for roulette wheel selection.
+    partialSum = .0
+
+    # Variables for roulette wheel selections.
+    parent0 = {}
+    parent1 = {}
+
     # Create the starting population:
-    population00 = []
+    population00 = []                   # Using a list should help with iterability.
 
     for i in range(startingPopulationSize, 0, -1):
 
@@ -46,27 +56,55 @@ def main():
         if nextChromosome['evaluation'] == target:
             print("The chromosome that succeeded: " + str(nextChromosomeName))
             targetFound = True
-        # Otherwise, add the chromosome to the starting population.
+
+        # Otherwise, find the chromosome's fitness and add the chromosome to the starting population.
         else:
+            fitness(nextChromosome, target)
             population00.append(nextChromosome)
+
+            # Add this chromosome's fitness to the total fitness of the starting population for roulette wheel selection later.
+            totalFitness += nextChromosome['fitness']
 
      # Add the starting population to the
     instanceOfGeneticAlgorithm = {'population00': population00}
 
     # Create the next population:
 
-    #for i in range(startingPopulationSize):
+    # for i in range(startingPopulationSize):
 
-        # Select two members of the starting population based on fitness and using roulette wheel selection.
+    # Select two members of the starting population based on fitness and using roulette wheel selection:
 
+    # Generate a random number between 0 and our total fitness as the random point on our roulette wheel to stop.
+    random.seed()
+    randomFitness = random.uniform(0, totalFitness)
 
-        # Crossover bits from each of the chosen chromosomes.
+    # Add up the fitnesses of each chromosome until the partial sum is greater than the random fitness
+    for i in population00:
+        # While the partial sum is less than the random fitness, continue adding up fitnesses.
+        if partialSum < randomFitness:
+            partialSum += i['fitness']
+        # Otherwise, the chromosome has been found.
+        else:
+            parent0 = i
+            break
 
-            # Good crossover rate: .7
+    # Add up the fitnesses of each chromosome until the partial sum is greater than the random fitness
+    for i in population00:
+        # While the partial sum is less than the random fitness, continue adding up fitnesses.
+        if partialSum < randomFitness:
+            partialSum += i['fitness']
+        # Otherwise, the chromosome has been found.
+        else:
+            parent1 = i
+            break
 
-        # Step through the chosen chromosomes' bits and flip for mutations.
+    # Crossover bits from each of the chosen chromosomes.
 
-            # Good mutation rate: .001
+        # Good crossover rate: .7
+
+    # Step through the chosen chromosomes' bits and flip for mutations.
+
+        # Good mutation rate: .001
 
 
 def evaluate(chromosome, target):
