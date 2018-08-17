@@ -6,8 +6,8 @@
 import math
 import random
 
-def main():
 
+def main():
     # Generating a Population:
     # Initialization for the random number generator used to create our starting population bit strings.
     random.seed()
@@ -29,7 +29,6 @@ def main():
     # Create the starting population:
     population00 = []
 
-
     for i in range(startingPopulationSize, 0, -1):
 
         # Create the next chromosome in the population.
@@ -44,7 +43,7 @@ def main():
         evaluate(nextChromosome, target)
 
         # Check to see if the chromosome matches the target.
-        if(nextChromosome['evaluation'] == target):
+        if nextChromosome['evaluation'] == target:
             print("The chromosome that succeeded: " + str(nextChromosomeName))
             targetFound = True
         # Otherwise, add the chromosome to the starting population.
@@ -68,7 +67,6 @@ def main():
         # Step through the chosen chromosomes' bits and flip for mutations.
 
             # Good mutation rate: .001
-
 
 
 def evaluate(chromosome, target):
@@ -225,6 +223,7 @@ def evaluate(chromosome, target):
     # Store the final evaluation as a float back in the chromosome's dictionary.
     chromosome['evaluation'] = float(evaluation)
 
+
 def fitness(chromosome, target):
 
     evaluation = chromosome['evaluation']
@@ -236,7 +235,6 @@ def fitness(chromosome, target):
     # Otherwise, calculate the chromosome's fitness and store it back in the chromosome's dictionary.
     foundFitness = 1 / (target - evaluation)
     chromosome['fitness'] = float(foundFitness)
-
 
 
 # This allows a python file to be used as an executable (main will run) or as a library (main will not).
