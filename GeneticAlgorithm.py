@@ -36,8 +36,9 @@ def main():
     parent0 = {}
     parent1 = {}
 
-    # Create the starting population:
+    # Create the starting populations:
     population00 = []                   # Using a list should help with iterability.
+    population01 = []
 
     for i in range(startingPopulationSize, 0, -1):
 
@@ -70,41 +71,62 @@ def main():
 
     # Create the next population:
 
-    # for i in range(startingPopulationSize):
+    # Select two members of the starting population based on fitness and using roulette wheel selection.
+    for i in range(startingPopulationSize):
 
-    # Select two members of the starting population based on fitness and using roulette wheel selection:
+        # Generate a random number between 0 and our total fitness as the random point on our roulette wheel to
+        # for parent0.
+        random.seed()
+        randomFitness = random.uniform(0, totalFitness)
 
-    # Generate a random number between 0 and our total fitness as the random point on our roulette wheel to stop.
-    random.seed()
-    randomFitness = random.uniform(0, totalFitness)
+        # Add up the fitnesses of each chromosome until the partial sum is greater than the random fitness.
+        for i in population00:
+            # While the partial sum is less than the random fitness, continue adding up fitnesses.
+            if partialSum < randomFitness:
+                partialSum += i['fitness']
+            # Otherwise, the chromosome has been found.
+            else:
+                parent0 = i
+                break
 
-    # Add up the fitnesses of each chromosome until the partial sum is greater than the random fitness
-    for i in population00:
-        # While the partial sum is less than the random fitness, continue adding up fitnesses.
-        if partialSum < randomFitness:
-            partialSum += i['fitness']
-        # Otherwise, the chromosome has been found.
-        else:
-            parent0 = i
-            break
+        # Generate a random number between 0 and our total fitness as the random point on our roulette wheel to
+        # stop for parent1.
+        random.seed()
+        randomFitness = random.uniform(0, totalFitness)
 
-    # Add up the fitnesses of each chromosome until the partial sum is greater than the random fitness
-    for i in population00:
-        # While the partial sum is less than the random fitness, continue adding up fitnesses.
-        if partialSum < randomFitness:
-            partialSum += i['fitness']
-        # Otherwise, the chromosome has been found.
-        else:
-            parent1 = i
-            break
+        # Add up the fitnesses of each chromosome until the partial sum is greater than the random fitness.
+        for i in population00:
+            # While the partial sum is less than the random fitness, continue adding up fitnesses.
+            if partialSum < randomFitness:
+                partialSum += i['fitness']
+            # Otherwise, the chromosome has been found.
+            else:
+                parent1 = i
+                break
 
-    # Crossover bits from each of the chosen chromosomes.
+        # Crossover bits from each of the chosen chromosomes.
 
-        # Good crossover rate: .7
+            # Good crossover rate: .7
 
-    # Step through the chosen chromosomes' bits and flip for mutations.
+        # Step through the chosen chromosomes' bits and flip for mutations.
 
-        # Good mutation rate: .001
+            # Good mutation rate: .001
+            #for i in parent0['name']:
+
+                #random.seed()
+                #mutationAttempt = random.random()
+
+                #if mutationAttempt ... :
+                    #if name[i] == 0:
+                        #name[i] = 1
+                    #else:
+                        #name[i] = 0
+
+
+
+        # Add the chromosomes to the new population.
+        #population01.append(parent0)
+        #population01.append(parent1)
 
 
 def evaluate(chromosome, target):
