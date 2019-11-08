@@ -14,77 +14,78 @@ def main():
     random.seed()
 
     # A dictionary used to rep a population of chromosomes (list of binary string chromosomes).
-    instanceOfGeneticAlgorithm = {}
+    population = {}
 
     # A Boolean to track whether the target solution has been found.
-    targetFound = False
+    target_found = False
 
     # Initialize variable for the starting population size and the chromosome length. The length must
     # be divisible by four for the algorithm to work correctly, since encoded genes are each 4 bits long.
-    startingPopulationSize = 10000
-    chromosomeSize = 80
+    starting_population_size = 10000
+    chromosome_size = 80
 
     # Establish the target value.
     target = 27
 
     # A variable for tracking the total fitness of the starting population for use in roulette wheel selection later.
-    totalFitness = .0
+    total_fitness = .0
 
     # A variable to hold the partial summation of fitnesses evaluated for roulette wheel selection.
-    partialSum = .0
+    partial_sum = .0
 
     # Variables for roulette wheel selections.
     parent0 = {}
     parent1 = {}
 
     # Create the starting populations:
-    population00 = []                   # Using a list should help with iterability.
+    population00 = []
     population01 = []
 
-    for i in range(startingPopulationSize, 0, -1):
+    for i in range(starting_population_size, 0, -1):
 
         # Create the next chromosome in the population.
-        nextChromosome = {}
-        nextChromosomeName = []
-        for j in range(chromosomeSize):
-            randomBit = str(random.getrandbits(1))
-            nextChromosomeName.append(randomBit)
-        nextChromosome = {'name': nextChromosomeName}
+        next_chromosome = {}
+        next_chromosome_name = []
+        for j in range(chromosome_size):
+            random_bit = str(random.getrandbits(1))
+            next_chromosome_name.append(random_bit)
+        next_chromosome = {'name': next_chromosome_name}
 
         # Evaluate the chromosome.
-        evaluate(nextChromosome, target)
+        evaluate(next_chromosome, target)
 
         # Check to see if the chromosome matches the target.
-        if nextChromosome['evaluation'] == target:
-            print("The chromosome that succeeded: " + str(nextChromosomeName))
-            targetFound = True
+        if next_chromosome['evaluation'] == target:
+            print("The chromosome that succeeded: " + str(next_chromosome_name))
+            target_found = True
 
         # Otherwise, find the chromosome's fitness and add the chromosome to the starting population.
         else:
-            fitness(nextChromosome, target)
-            population00.append(nextChromosome)
+            fitness(next_chromosome, target)
+            population00.append(next_chromosome)
 
-            # Add this chromosome's fitness to the total fitness of the starting population for roulette wheel selection later.
-            totalFitness += nextChromosome['fitness']
+            # Add this chromosome's fitness to the total fitness of the starting population for roulette wheel
+            # selection later.
+            total_fitness += next_chromosome['fitness']
 
-     # Add the starting population to the
-    instanceOfGeneticAlgorithm = {'population00': population00}
+    # Add the starting population to the
+    population = {'population00': population00}
 
     # Create the next population:
 
     # Select two members of the starting population based on fitness and using roulette wheel selection.
-    for i in range(startingPopulationSize):
+    for i in range(starting_population_size):
 
         # Generate a random number between 0 and our total fitness as the random point on our roulette wheel to
         # for parent0.
         random.seed()
-        randomFitness = random.uniform(0, totalFitness)
+        random_fitness = random.uniform(0, total_fitness)
 
         # Add up the fitnesses of each chromosome until the partial sum is greater than the random fitness.
         for i in population00:
             # While the partial sum is less than the random fitness, continue adding up fitnesses.
-            if partialSum < randomFitness:
-                partialSum += i['fitness']
+            if partial_sum < random_fitness:
+                partial_sum += i['fitness']
             # Otherwise, the chromosome has been found.
             else:
                 parent0 = i
@@ -93,112 +94,143 @@ def main():
         # Generate a random number between 0 and our total fitness as the random point on our roulette wheel to
         # stop for parent1.
         random.seed()
-        randomFitness = random.uniform(0, totalFitness)
+        random_fitness = random.uniform(0, total_fitness)
 
         # Add up the fitnesses of each chromosome until the partial sum is greater than the random fitness.
         for i in population00:
             # While the partial sum is less than the random fitness, continue adding up fitnesses.
-            if partialSum < randomFitness:
-                partialSum += i['fitness']
+            if partial_sum < random_fitness:
+                partial_sum += i['fitness']
             # Otherwise, the chromosome has been found.
             else:
                 parent1 = i
                 break
 
         # Crossover bits from each of the chosen chromosomes.
+        # Good crossover rate: .7
 
-            # Good crossover rate: .7
+        # Determine whether crossover is occurring.
+        crossover_occurring = False
+        # TODO: .7 probability that crossover occurs.
+
+        # If crossover is occurring, choose a random bit along the length and swap all bits after that point.
+        if crossover_occurring:
+
+            random_bit_to_flip_after = random.randint(0, chromosome_size)
+            parent0s_new_bits = []
+            parent1s_new_bits = []
+
+            # Take parent0's bits after the flip point and save them for parent1.
+            # TODO: update with range to eliminate if statement
+            for index in parent0['name']:
+                if index >= random_bit_to_flip_after:
+                    parent1s_new_bits.append(parent0['name'][index])
+
+            # Take parent1's bits after the flip point and save them for parent0.
+            # TODO: update with range to eliminate if statement
+            for index in parent1.keys:
+                if index >= random_bit_to_flip_after:
+                    parent0s_new_bits.append(parent1['name'][index])
+
+            # Update values for saved bits for parent0.
+            next_key_index = random_bit_to_flip_after
+            for val in parent0s_new_bits:
+                parent0['name'][next_key_index] = val
+                next_key_index += 1
+
+            # Update values for saved bits for parent1.
+            next_key_index = random_bit_to_flip_after
+            for val in parent1s_new_bits:
+                parent1['name'][next_key_index] = val
+                next_key_index += 1
 
         # Step through the chosen chromosomes' bits and flip for mutations.
 
-            # Good mutation rate: .001
-            #for i in parent0['name']:
+        # Good mutation rate: .001
+        # for i in parent0['name']:
 
-                #random.seed()
-                #mutationAttempt = random.random()
+        # random.seed()
+        # mutationAttempt = random.random()
 
-                #if mutationAttempt ... :
-                    #if name[i] == 0:
-                        #name[i] = 1
-                    #else:
-                        #name[i] = 0
-
-
+        # if mutationAttempt ... :
+        # if name[i] == 0:
+        # name[i] = 1
+        # else:
+        # name[i] = 0
 
         # Add the chromosomes to the new population.
-        #population01.append(parent0)
-        #population01.append(parent1)
+        # population01.append(parent0)
+        # population01.append(parent1)
 
 
 def evaluate(chromosome, target):
-
     # Define the variables needed to calculate the evaluation of the chromosome.
-    chromosomeName = chromosome['name']
-    chromosomeGenes = []
-    chromosomeUsableGenes = []
+    chromosome_name = chromosome['name']
+    chromosome_genes = []
+    chromosome_usable_genes = []
     evaluation = .0
-    operatorNext = False
-    nextOperator = ''
-    nextValue = 0
+    operator_next = False
+    next_operator = ''
+    next_value = 0
 
     # Parse the chromosome 4 bits at a time into genes.
-    for i in range(0, len(chromosomeName) - 4, 4):
+    for i in range(0, len(chromosome_name) - 4, 4):
 
-        newGene = ''
+        new_gene = ''
 
         # Decode the bits for a gene and add the gene to the list of genes.
         for j in range(4):
-            newGene += str(chromosomeName[i + j])
+            new_gene += str(chromosome_name[i + j])
 
-        chromosomeGenes.append(newGene)
+        chromosome_genes.append(new_gene)
 
     # Evaluate the genes to determine the chromosome's collective evaluation.
-    for i in chromosomeGenes:
+    for i in chromosome_genes:
 
         # Decode the genes into their usable equivalent mathematical values. The pattern followed will
         # be: number -> operator -> number -> operator -> ... -> number.
 
         # If the next value we need is a number, determine which number, if any, the gene decodes to.
-        if operatorNext == False:
+        if operator_next == False:
             if i == '0000':
-                chromosomeUsableGenes.append(0)
-                operatorNext = True
+                chromosome_usable_genes.append(0)
+                operator_next = True
                 continue
             elif i == '0001':
-                chromosomeUsableGenes.append(1)
-                operatorNext = True
+                chromosome_usable_genes.append(1)
+                operator_next = True
                 continue
             elif i == '0010':
-                chromosomeUsableGenes.append(2)
-                operatorNext = True
+                chromosome_usable_genes.append(2)
+                operator_next = True
                 continue
             elif i == '0011':
-                chromosomeUsableGenes.append(3)
-                operatorNext = True
+                chromosome_usable_genes.append(3)
+                operator_next = True
                 continue
             elif i == '0100':
-                chromosomeUsableGenes.append(4)
-                operatorNext = True
+                chromosome_usable_genes.append(4)
+                operator_next = True
                 continue
             elif i == '0101':
-                chromosomeUsableGenes.append(5)
-                operatorNext = True
+                chromosome_usable_genes.append(5)
+                operator_next = True
                 continue
             elif i == '0110':
-                chromosomeUsableGenes.append(6)
-                operatorNext = True
+                chromosome_usable_genes.append(6)
+                operator_next = True
                 continue
             elif i == '0111':
-                chromosomeUsableGenes.append(7)
-                operatorNext = True
+                chromosome_usable_genes.append(7)
+                operator_next = True
                 continue
             elif i == '1000':
-                chromosomeUsableGenes.append(8)
-                operatorNext = True
+                chromosome_usable_genes.append(8)
+                operator_next = True
                 continue
             elif i == '1001':
-                chromosomeUsableGenes.append(9)
-                operatorNext = True
+                chromosome_usable_genes.append(9)
+                operator_next = True
                 continue
             elif i == '1010':
                 continue
@@ -235,20 +267,20 @@ def evaluate(chromosome, target):
             elif i == '1001':
                 continue
             elif i == '1010':
-                chromosomeUsableGenes.append('+')
-                operatorNext = False
+                chromosome_usable_genes.append('+')
+                operator_next = False
                 continue
             elif i == '1011':
-                chromosomeUsableGenes.append('-')
-                operatorNext = False
+                chromosome_usable_genes.append('-')
+                operator_next = False
                 continue
             elif i == '1100':
-                chromosomeUsableGenes.append('*')
-                operatorNext = False
+                chromosome_usable_genes.append('*')
+                operator_next = False
                 continue
             elif i == '1101':
-                chromosomeUsableGenes.append('/')
-                operatorNext = False
+                chromosome_usable_genes.append('/')
+                operator_next = False
                 continue
             elif i == '1110':
                 continue
@@ -258,27 +290,27 @@ def evaluate(chromosome, target):
     # Determine the evaluated total of the usable genes.
 
     # Set the evaluation to the first usable gene, a number.
-    evaluation = float(chromosomeUsableGenes[0])
+    evaluation = float(chromosome_usable_genes[0])
 
     # Since the usable genes follow the number -> operator -> number pattern, if the index is odd,
     # the value is an operator (string).
-    for i in range(1, len(chromosomeUsableGenes) - 1, 2):
+    for i in range(1, len(chromosome_usable_genes) - 1, 2):
 
         # Store the next operator and the next value.
-        nextOperator = chromosomeUsableGenes[i]
-        nextValue = chromosomeUsableGenes[(i + 1)]
+        next_operator = chromosome_usable_genes[i]
+        next_value = chromosome_usable_genes[(i + 1)]
 
         # Based on the operator, perform the corresponding calculation.
-        if nextOperator == '+':
-            evaluation = evaluation + nextValue
-        if nextOperator == '-':
-            evaluation = evaluation - nextValue
-        if nextOperator == '*':
-            evaluation = evaluation * nextValue
-        if nextOperator == '/':
+        if next_operator == '+':
+            evaluation = evaluation + next_value
+        if next_operator == '-':
+            evaluation = evaluation - next_value
+        if next_operator == '*':
+            evaluation = evaluation * next_value
+        if next_operator == '/':
             # Ensure no division by zero.
-            if nextValue != 0:
-                evaluation = evaluation / nextValue
+            if next_value != 0:
+                evaluation = evaluation / next_value
             # Otherwise the loop advances to the next operator to see if there is a viable pairing to evaluate.
 
     # Store the final evaluation as a float back in the chromosome's dictionary.
@@ -286,7 +318,6 @@ def evaluate(chromosome, target):
 
 
 def fitness(chromosome, target):
-
     evaluation = chromosome['evaluation']
 
     # If the target and the evaluation are the same, a successful solution has been found.
@@ -294,8 +325,8 @@ def fitness(chromosome, target):
         return chromosome
 
     # Otherwise, calculate the chromosome's fitness and store it back in the chromosome's dictionary.
-    foundFitness = 1 / (target - evaluation)
-    chromosome['fitness'] = float(foundFitness)
+    found_fitness = 1 / (target - evaluation)
+    chromosome['fitness'] = float(found_fitness)
 
 
 # This allows a python file to be used as an executable (main will run) or as a library (main will not).
