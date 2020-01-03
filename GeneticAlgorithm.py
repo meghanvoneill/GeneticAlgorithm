@@ -10,8 +10,6 @@ import random
 
 def main():
     # Generating a Population:
-    # Initialization for the random number generator used to create our starting population bit strings.
-    random.seed()
 
     # A dictionary used to rep a population of chromosomes (list of binary string chromosomes).
     population = {}
@@ -93,7 +91,6 @@ def main():
 
         # Generate a random number between 0 and our total fitness as the random point on our roulette wheel to
         # stop for parent1.
-        random.seed()
         random_fitness = random.uniform(0, total_fitness)
 
         # Add up the fitnesses of each chromosome until the partial sum is greater than the random fitness.
@@ -108,10 +105,13 @@ def main():
 
         # Crossover bits from each of the chosen chromosomes.
         # Good crossover rate: .7
+        crossover_rate = .7
 
         # Determine whether crossover is occurring.
         crossover_occurring = False
-        # TODO: .7 probability that crossover occurs.
+        random_crossover = random.uniform()
+        if random_crossover <= crossover_rate:
+            crossover_occurring = True
 
         # If crossover is occurring, choose a random bit along the length and swap all bits after that point.
         if crossover_occurring:
@@ -128,7 +128,7 @@ def main():
 
             # Take parent1's bits after the flip point and save them for parent0.
             # TODO: update with range to eliminate if statement
-            for index in parent1.keys:
+            for index in parent1['name']:
                 if index >= random_bit_to_flip_after:
                     parent0s_new_bits.append(parent1['name'][index])
 
@@ -147,6 +147,13 @@ def main():
         # Step through the chosen chromosomes' bits and flip for mutations.
 
         # Good mutation rate: .001
+        mutation_rate = .001
+
+        mutation_occurring = False
+        random_mutation = random.random()
+        if random_mutation <= mutation_rate:
+            mutation_occurring = True
+
         # for i in parent0['name']:
 
         # random.seed()
@@ -168,10 +175,7 @@ def evaluate(chromosome, target):
     chromosome_name = chromosome['name']
     chromosome_genes = []
     chromosome_usable_genes = []
-    evaluation = .0
     operator_next = False
-    next_operator = ''
-    next_value = 0
 
     # Parse the chromosome 4 bits at a time into genes.
     for i in range(0, len(chromosome_name) - 4, 4):
