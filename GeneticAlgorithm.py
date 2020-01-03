@@ -109,7 +109,7 @@ def main():
 
         # Determine whether crossover is occurring.
         crossover_occurring = False
-        random_crossover = random.uniform()
+        random_crossover = random.random()
         if random_crossover <= crossover_rate:
             crossover_occurring = True
 
@@ -124,13 +124,13 @@ def main():
             # TODO: update with range to eliminate if statement
             for index in parent0['name']:
                 if index >= random_bit_to_flip_after:
-                    parent1s_new_bits.append(parent0['name'][index])
+                    parent1s_new_bits.append(parent0['name'][int(index)])
 
             # Take parent1's bits after the flip point and save them for parent0.
             # TODO: update with range to eliminate if statement
             for index in parent1['name']:
                 if index >= random_bit_to_flip_after:
-                    parent0s_new_bits.append(parent1['name'][index])
+                    parent0s_new_bits.append(parent1['name'][int(index)])
 
             # Update values for saved bits for parent0.
             next_key_index = random_bit_to_flip_after
