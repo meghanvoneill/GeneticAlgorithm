@@ -151,13 +151,11 @@ def main():
 
         mutation_occurring = False
         random_mutation = random.random()
+        # iterate through chromosomes' bits and flip if mutation occuring
         if random_mutation <= mutation_rate:
             mutation_occurring = True
 
         # for i in parent0['name']:
-
-        # random.seed()
-        # mutationAttempt = random.random()
 
         # if mutationAttempt ... :
         # if name[i] == 0:
